@@ -1,0 +1,31 @@
+
+cmake_minimum_required(VERSION 3.15)
+
+# Set the project name
+project(RayTracingProject)
+
+# Specify the C++ standard
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+# Add the executable
+add_executable(RayTracingProject main.cc)
+
+# Add an option to select the precision type
+option(USE_DOUBLE "Use double precision" ON)
+
+# Define a preprocessor macro based on the selected precision
+if (USE_DOUBLE)
+    message("Using double precision floats for vector and color math")
+    target_compile_definitions(RayTracingProject PUBLIC -DFLOATTYPE=double)
+else()
+    message("Using single precision floats for vector and color math")
+    target_compile_definitions(RayTracingProject PUBLIC -DFLOATTYPE=float)
+endif()
+
+# Enable warnings for MSVC
+if (MSVC)
+    target_compile_options(RayTracingProject PRIVATE /W4 /permissive-)
+else()
+    target_compile_options(RayTracingProject PRIVATE -Wall -Wextra -pedantic)
+endif()
